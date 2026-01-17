@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WILDCARD ANCHOR APPLICATION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: #ff4444;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+        }
+
+        .motto {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            line-height: 1.6;
+            padding: 0 1rem;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            color: #ff4444;
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option {
+            background: #151515;
+            border: 1px solid #333;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #ccc;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: #ff4444;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .option.selected {
+            border-color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .option.wrong {
+            border-color: #ff4444;
+            background: rgba(255, 68, 68, 0.15);
+        }
+
+        .response {
+            display: none;
+            padding: 1.5rem;
+            background: #111;
+            border-left: 3px solid #ff4444;
+            margin-bottom: 1.5rem;
+        }
+
+        .response.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .response-wrong {
+            color: #ff6666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .response-answer {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .next-btn {
+            display: none;
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 0.75rem 2rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .next-btn.visible {
+            display: inline-block;
+        }
+
+        .next-btn:hover {
+            background: #ff4444;
+            color: #000;
+        }
+
+        .final-container {
+            text-align: center;
+        }
+
+        .final-text {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        .final-answer {
+            font-size: 1.3rem;
+            color: #fff;
+            margin: 2rem 0;
+            font-weight: 700;
+        }
+
+        .close-form {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: #ff4444;
+            letter-spacing: 0.2em;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            padding: 1rem 3rem;
+            border: 2px solid #ff4444;
+        }
+
+        .close-form:hover {
+            background: #ff4444;
+            color: #000;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Wildcard Anchor Application</h1>
+            <p class="motto">"when you die, hide. when i die bleed out so you can die trying to get my orbs"</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-container active" id="q1">
+            <div class="question-number">QUESTION 01</div>
+            <div class="question-text">I die. You:</div>
+            <div class="options">
+                <div class="option" data-choice="a" onclick="selectOption(1, 'a')">A) Die with me</div>
+                <div class="option" data-choice="b" onclick="selectOption(1, 'b')">B) Rush my orbs</div>
+            </div>
+            <div class="response" id="r1">
+                <div class="response-wrong">
+                    <span id="r1-a">A) You're not an anchor.</span><br>
+                    <span id="r1-b">B) You revealed yourself.</span>
+                </div>
+                <div class="response-answer">Hide.</div>
+            </div>
+            <button class="next-btn" id="n1" onclick="nextQuestion(2)">NEXT</button>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container" id="q2">
+            <div class="question-number">QUESTION 02</div>
+            <div class="question-text">I push a bad fight. You:</div>
+            <div class="options">
+                <div class="option" data-choice="a" onclick="selectOption(2, 'a')">A) Push with me</div>
+                <div class="option" data-choice="b" onclick="selectOption(2, 'b')">B) Hold angle</div>
+            </div>
+            <div class="response" id="r2">
+                <div class="response-wrong">
+                    <span id="r2-a">A) Now you're dead too.</span><br>
+                    <span id="r2-b">B) Now you're shooting.</span>
+                </div>
+                <div class="response-answer">Watch.</div>
+            </div>
+            <button class="next-btn" id="n2" onclick="nextQuestion(3)">NEXT</button>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container" id="q3">
+            <div class="question-number">QUESTION 03</div>
+            <div class="question-text">A team walks past you. You:</div>
+            <div class="options">
+                <div class="option" data-choice="a" onclick="selectOption(3, 'a')">A) Call it out</div>
+                <div class="option" data-choice="b" onclick="selectOption(3, 'b')">B) Shoot one</div>
+            </div>
+            <div class="response" id="r3">
+                <div class="response-wrong">
+                    <span id="r3-a">A) Now I know. Now I push. Now I die.</span><br>
+                    <span id="r3-b">B) Now they know. Now the team they pushed knows. Now everyone knows.</span>
+                </div>
+                <div class="response-answer">If they don't see you they don't see me. Let them walk.</div>
+            </div>
+            <button class="next-btn" id="n3" onclick="nextQuestion(4)">NEXT</button>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container" id="q4">
+            <div class="question-number">QUESTION 04</div>
+            <div class="question-text">I'm spectating you. You:</div>
+            <div class="options">
+                <div class="option" data-choice="a" onclick="selectOption(4, 'a')">A) Clutch</div>
+                <div class="option" data-choice="b" onclick="selectOption(4, 'b')">B) Play it safe</div>
+            </div>
+            <div class="response" id="r4">
+                <div class="response-wrong">
+                    <span id="r4-a">A) Trying is dying.</span><br>
+                    <span id="r4-b">B) Thinking is trying.</span>
+                </div>
+                <div class="response-answer">Rat.</div>
+            </div>
+            <button class="next-btn" id="n4" onclick="nextQuestion(5)">NEXT</button>
+        </div>
+
+        <!-- Final -->
+        <div class="question-container" id="q5">
+            <div class="final-container">
+                <div class="question-number">FINAL QUESTION</div>
+                <div class="question-text">Why are you filling this out?</div>
+                <div class="divider"></div>
+                <div class="final-text">Applying is trying too hard.</div>
+                <div class="final-text">Anchors don't try.</div>
+                <div class="final-text">Anchors just don't die.</div>
+                <div class="final-answer">Close the form.</div>
+                <a href="https://www.twitch.tv/gsq_zeus" class="close-form" target="_blank">CLOSE THE FORM</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectOption(questionNum, choice) {
+            const container = document.getElementById(`q${questionNum}`);
+            const options = container.querySelectorAll('.option');
+            const response = document.getElementById(`r${questionNum}`);
+            const nextBtn = document.getElementById(`n${questionNum}`);
+            
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.classList.add('wrong');
+                opt.style.pointerEvents = 'none';
+            });
+            
+            const selected = container.querySelector(`[data-choice="${choice}"]`);
+            selected.classList.add('selected');
+            
+            response.classList.add('visible');
+            nextBtn.classList.add('visible');
+        }
+
+        function nextQuestion(nextNum) {
+            const questions = document.querySelectorAll('.question-container');
+            questions.forEach(q => q.classList.remove('active'));
+            
+            document.getElementById(`q${nextNum}`).classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
